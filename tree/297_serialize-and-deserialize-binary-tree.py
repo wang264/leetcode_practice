@@ -82,6 +82,45 @@ class Codec:
         return root
 
 
+
+class CodecRecursive:
+
+    def serialize(self, root):
+        """Encodes a tree to a single string.
+
+        :type root: TreeNode
+        :rtype: str
+        """
+        rslt = []
+        self._serialize(root, rslt)
+        return ' '.join(rslt)
+
+    def _serialize(self, root, rslt):
+        if not root:
+            rslt.append("#")
+            return
+        rslt.append(str(root.val))
+        self._serialize(root.left,rslt)
+        self._serialize(root.right,rslt)
+
+    def deserialize(self, data):
+        """Decodes your encoded data to tree.
+
+        :type data: str
+        :rtype: TreeNode
+        """
+        data_stream = deque(data.split(" "))
+        return self._deserialize(data_stream)
+
+    def _deserialize(self, data_steam: deque):
+        char = data_steam.popleft()
+        if char == '#':
+            return None
+        tree_node = TreeNode(int(char))
+        tree_node.left = self._deserialize(data_steam)
+        tree_node.right = self._deserialize(data_steam)
+        return tree_node
+
 # Your Codec object will be instantiated and called as such:
 codec = Codec()
 # codec.deserialize(codec.serialize(root))
@@ -92,3 +131,8 @@ root = deserialize_from_helper('[1,2,3,null,null,4,5]')
 
 data = codec.serialize(root=root)
 root_rslt = codec.deserialize(data)
+
+
+codec_rec = CodecRecursive()
+data_rec = codec_rec.serialize(root)
+root_rslt_rec = codec_rec.deserialize(data=data_rec)
