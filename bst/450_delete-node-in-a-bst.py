@@ -34,9 +34,48 @@
 # root is a valid binary search tree.
 # -105 <= key <= 105
 
-from helperfunc import TreeNode
+from helperfunc import TreeNode, build_tree_breadth_first
+
 
 class Solution:
     def deleteNode(self, root: TreeNode, key: int) -> TreeNode:
-        
+        if root is None:
+            return None
+        if key > root.val:
+            root.right = self.deleteNode(root.right, key)
+        elif key < root.val:
+            root.left = self.deleteNode(root.left, key)
+        else:
+            new_root = None
+            if root.left is None:
+                new_root = root.right
+            elif root.right is None:
+                new_root = root.left
+            else:
+                # find the min node in the right sub tree
+                new_root_parent = root
+                new_root = root.right
 
+                while new_root.left:
+                    new_root_parent = new_root
+                    new_root = new_root.left
+
+                # this is true if the new_root is the right child of the node you want to delete.
+                if new_root_parent != root:
+                    new_root_parent.left = new_root.right
+                    new_root.right = root.right
+                new_root.left = root.left
+
+            return new_root
+
+        return root
+
+
+sol = Solution()
+tree = build_tree_breadth_first(sequence=[5, 3, 6, 2, 4, None, 7, 1, 2.5, 3.5, 4.5])
+
+new_tree = sol.deleteNode(root=tree, key=3)
+
+tree = build_tree_breadth_first(sequence=[5, 3, 6, 2, 4, None, 7, 1, 2.5, 3.5, 4.5])
+
+new_tree = sol.deleteNode(root=tree, key=4)
