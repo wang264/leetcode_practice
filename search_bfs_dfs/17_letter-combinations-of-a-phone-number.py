@@ -21,6 +21,36 @@
 # * digits[i] is a digit in the range ['2', '9'].
 
 from typing import List
+
+
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
-        pass
+        dic = {1: [],
+               2: ['a', 'b', 'c'],
+               3: ['d', 'e', 'f'],
+               4: ['g', 'h', 'i'],
+               5: ['j', 'k', 'l'],
+               6: ['m', 'n', 'o'],
+               7: ['p', 'q', 'r', 's'],
+               8: ['t', 'u', 'v'],
+               9: ['w', 'x', 'y', 'z']}
+        rslt = []
+        self.dfs(digits, 0, [],rslt, dic)
+        return rslt
+
+    def dfs(self, digits, curr_digit, curr_selection, rslt, dic):
+        if len(digits) == 0:
+            return []
+        
+        if curr_digit == len(digits):
+            rslt.append(''.join(curr_selection))
+            return
+
+        for char in dic[int(digits[curr_digit])]:
+            curr_selection.append(char)
+            self.dfs(digits, curr_digit + 1, curr_selection, rslt, dic)
+            curr_selection.pop()
+
+sol =Solution()
+sol.letterCombinations(digits='23')
+
