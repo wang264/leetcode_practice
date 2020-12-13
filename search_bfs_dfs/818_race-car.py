@@ -4,7 +4,8 @@
 # Your car starts at position 0 and speed +1 on an infinite number line.  (Your car can go into negative positions.)
 # Your car drives automatically according to a sequence of instructions A (accelerate) and R (reverse).
 # When you get an instruction "A", your car does the following: position += speed, speed *= 2.
-# When you get an instruction "R", your car does the following: if your speed is positive then speed = -1 , otherwise speed = 1.  (Your position stays the same.)
+# When you get an instruction "R", your car does the following: if your speed is positive then speed = -1 ,
+# otherwise speed = 1.  (Your position stays the same.)
 # For example, after commands "AAR", your car goes to positions 0->1->3->3, and your speed goes to 1->2->4->-1.
 # Now for some target position, say the length of the shortest sequence of instructions to get there.
 #
@@ -28,7 +29,42 @@
 # Note:
 # 1 <= target <= 10000.
 
+from collections import deque
+
 
 class Solution:
     def racecar(self, target: int) -> int:
-        pass
+        num_command = 0
+        commands = ''
+        q = deque()
+        start_pos = 0
+        start_speed = 1
+        q.append((commands,start_pos, start_speed))
+
+        while q:
+            for _ in range(len(q)):
+                curr_commands, curr_pos, curr_speed = q.popleft()
+                if curr_pos == target:
+                    return num_command
+                for command in ['A', 'R']:
+                    next_pos, next_speed = self.on_command(command, curr_pos, curr_speed)
+                    q.append((curr_commands+command, next_pos, next_speed))
+
+            num_command+=1
+
+    def on_command(self, command, curr_pos, curr_speed):
+        # output next_pos, next_speed
+        if command == 'A':
+            next_pos = curr_pos + curr_speed
+            next_speed = curr_speed * 2
+        elif command == "R":
+            if curr_speed > 0:
+                next_speed = -1
+            elif curr_speed < 0:
+                next_speed = 1
+            next_pos = curr_pos
+
+        return next_pos, next_speed
+
+sol = Solution()
+sol.racecar(target=6)
