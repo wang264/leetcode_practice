@@ -40,10 +40,45 @@ from typing import List
 
 
 class Solution:
-    def __init__(self):
-        self.father = dict()
-        self.owner = dict()
-        self.root_node_to_its_sons = dict()
-
     def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
-       pass
+        graph = dict()
+        # g[A][B] = k -> A / B = k
+        for equation, value in zip(equations, values):
+            a = equation[0]
+            b = equation[1]
+            k = value
+            if a not in graph.keys():
+                graph[a] = dict()
+            if b not in graph.keys():
+                graph[b] = dict()
+            graph[a][b] = k
+            graph[b][a] = 1 / k
+
+        rslt = []
+        for query in queries:
+            visited = set()
+            rslt.append(self.dfs_find_rslt(query[0], query[1], graph, visited))
+        return rslt
+
+    def dfs_find_rslt(self, A, B, graph: dict, visited: set):
+        if A not in graph or B not in graph:
+            return -1
+        if A == B:
+            return 1
+        visited.add(A)
+        # A/B = A/C*C/B
+        for C in graph[A].keys():
+            if C in visited:
+                continue
+            d = self.dfs_find_rslt(C, B, graph, visited)
+            if d > 0:
+                return graph[A][C] * d
+        return -1
+
+
+sol = Solution()
+equations = [["a", "b"], ["b", "c"]]
+values = [2.0, 3.0]
+queries = [["a", "c"], ["b", "a"], ["a", "e"], ["a", "a"], ["x", "x"]]
+
+sol.calcEquation(equations, values, queries)
