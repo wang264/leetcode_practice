@@ -34,6 +34,45 @@
 # bank: ["AAAACCCC", "AAACCCCC", "AACCCCCC"]
 # return: 3
 
+from collections import deque
 from typing import List
+
+
 class Solution:
     def minMutation(self, start: str, end: str, bank: List[str]) -> int:
+        # solve using bfs
+        visited = set()
+        q = deque()
+        q.append(start)
+        visited.add(start)
+        step = 0
+        while q:
+            for _ in range(len(q)):
+                curr_gene = q.popleft()
+                if curr_gene == end:
+                    return step
+                for next_gene in self.get_valid_mutates(start=curr_gene, bank=bank):
+                    if next_gene not in visited:
+                        q.append(next_gene)
+                        visited.add(next_gene)
+
+            step += 1
+
+        return -1
+
+    def get_valid_mutates(self, start: str, bank: List[str]):
+        n = len(start)
+        valid_mutates = []
+        for i in range(n):
+            for gene in ["A", "C", "G", "T"]:
+                new_gene = start[0:i] + gene + start[i + 1:]
+                if new_gene in bank:
+                    valid_mutates.append(new_gene)
+        return valid_mutates
+
+
+sol = Solution()
+start = "AAAAACCC"
+end = "AACCCCCC"
+bank = ["AAAACCCC", "AAACCCCC", "AACCCCCC"]
+sol.minMutation(start,end,bank)
