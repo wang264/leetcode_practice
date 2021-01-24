@@ -67,3 +67,55 @@ m = [[1, 1, 0],
      [0, 1, 1]]
 
 sol.findCircleNum(M=m)
+
+
+class Solution2:
+    def __init__(self):
+        self.father = dict()
+        self.components = None
+
+    def union(self, a, b):
+        root_a = self.find(a)
+        root_b = self.find(b)
+        if root_a != root_b:
+            self.father[root_b] = root_a
+            self.components -= 1
+
+    def find(self, x):
+        if x not in self.father:
+            self.father[x] = x
+
+        if self.father[x] == x:
+            return x
+
+        root = x
+        while self.father[root] != root:
+            root = self.father[root]
+
+        # path compression
+        while self.father[x] != x:
+            temp = self.father[x]
+            self.father[x] = root
+            x = temp
+
+        return root
+
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        n = len(isConnected)
+        self.components = n
+
+        for i in range(1, n):
+            for j in range(0, i):
+                if isConnected[i][j] == 1:
+                    self.union(i, j)
+        return self.components
+
+
+sol = Solution2()
+m = [[1, 1, 0],
+     [1, 1, 1],
+     [0, 1, 1]]
+m = [[1, 1, 1],
+     [1, 1, 1],
+     [1, 1, 1]]
+sol.findCircleNum(isConnected=m)
