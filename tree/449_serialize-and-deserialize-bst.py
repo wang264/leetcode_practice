@@ -50,6 +50,8 @@ class Codec:
         data_stream = deque(data.split(" "))
         return self._deserialize(data_stream, -sys.maxsize, sys.maxsize)
 
+    # cur_min: the minimum allowed number for the next node.
+    # curr_max: the maximum allowed number for the next node.
     def _deserialize(self, data_stream, cur_min, cur_max):
         if not data_stream:
             return None
