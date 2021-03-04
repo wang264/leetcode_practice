@@ -4,9 +4,9 @@ def josephus(n, k):
     rslt = []
     while len(array) > 1:
         rslt.append(array.pop(idx_to_kill))
-        idx_to_kill = (idx_to_kill-1+k)%len(array)
+        idx_to_kill = (idx_to_kill - 1 + k) % len(array)
 
-    return rslt+array
+    return rslt + array
 
 
-josephus(10,3)
+josephus(10, 3)
