@@ -9,9 +9,11 @@ def print_input_out_put(func):
 
     return wrapper
 
-@print_input_out_put
+#@print_input_out_put
 def func_sum(a, b):
     return a + b
 
 
 func_sum(1,2)
+
+func_sum = print_input_out_put(func=func_sum)
