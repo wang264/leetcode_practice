@@ -67,3 +67,4 @@ class Solution:
 
 sol = Solution()
 sol.longestStrChain(words=["a", "b", "ba", "bca", "bda", "bdca"])
+
